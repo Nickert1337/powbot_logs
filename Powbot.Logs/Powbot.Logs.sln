@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Powbot.Logs", "Powbot.Logs\Powbot.Logs.csproj", "{F3153C23-C310-434A-93F5-99DD02304E97}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F3153C23-C310-434A-93F5-99DD02304E97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3153C23-C310-434A-93F5-99DD02304E97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3153C23-C310-434A-93F5-99DD02304E97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3153C23-C310-434A-93F5-99DD02304E97}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7BAAA8BA-7759-42F5-BCFD-EACC6C900234}
+	EndGlobalSection
+EndGlobal

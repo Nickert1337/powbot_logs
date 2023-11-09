@@ -35,12 +35,13 @@
             mainPanel = new Panel();
             logsTxt = new RichTextBox();
             logControlsPanel = new Panel();
+            autoScrollCheck = new CheckBox();
             autoRefreshCheck = new CheckBox();
             refreshLogsBttn = new Button();
             copyLogsBttn = new Button();
             leftPanel = new Panel();
             uiTimer = new System.Windows.Forms.Timer(components);
-            autoScrollCheck = new CheckBox();
+            clearBufferBttn = new Button();
             devicesPanel.SuspendLayout();
             mainPanel.SuspendLayout();
             logControlsPanel.SuspendLayout();
@@ -105,6 +106,7 @@
             // 
             // logControlsPanel
             // 
+            logControlsPanel.Controls.Add(clearBufferBttn);
             logControlsPanel.Controls.Add(autoScrollCheck);
             logControlsPanel.Controls.Add(autoRefreshCheck);
             logControlsPanel.Controls.Add(refreshLogsBttn);
@@ -117,10 +119,21 @@
             logControlsPanel.TabIndex = 4;
             logControlsPanel.Visible = false;
             // 
+            // autoScrollCheck
+            // 
+            autoScrollCheck.AutoSize = true;
+            autoScrollCheck.Location = new Point(5, 88);
+            autoScrollCheck.Name = "autoScrollCheck";
+            autoScrollCheck.Size = new Size(83, 19);
+            autoScrollCheck.TabIndex = 4;
+            autoScrollCheck.Text = "Auto scroll";
+            autoScrollCheck.UseVisualStyleBackColor = true;
+            autoScrollCheck.CheckedChanged += autoScrollCheck_CheckedChanged;
+            // 
             // autoRefreshCheck
             // 
             autoRefreshCheck.AutoSize = true;
-            autoRefreshCheck.Location = new Point(5, 34);
+            autoRefreshCheck.Location = new Point(5, 63);
             autoRefreshCheck.Name = "autoRefreshCheck";
             autoRefreshCheck.Size = new Size(91, 19);
             autoRefreshCheck.TabIndex = 2;
@@ -134,7 +147,7 @@
             refreshLogsBttn.Name = "refreshLogsBttn";
             refreshLogsBttn.Size = new Size(94, 23);
             refreshLogsBttn.TabIndex = 3;
-            refreshLogsBttn.Text = "Refresh";
+            refreshLogsBttn.Text = "Refresh logs";
             refreshLogsBttn.UseVisualStyleBackColor = true;
             refreshLogsBttn.Click += refreshLogsBttn_Click;
             // 
@@ -144,7 +157,7 @@
             copyLogsBttn.Name = "copyLogsBttn";
             copyLogsBttn.Size = new Size(94, 23);
             copyLogsBttn.TabIndex = 1;
-            copyLogsBttn.Text = "Copy";
+            copyLogsBttn.Text = "Copy logs";
             copyLogsBttn.UseVisualStyleBackColor = true;
             copyLogsBttn.Click += copyLogsBttn_Click;
             // 
@@ -164,16 +177,15 @@
             uiTimer.Interval = 250;
             uiTimer.Tick += uiTimer_Tick;
             // 
-            // autoScrollCheck
+            // clearBufferBttn
             // 
-            autoScrollCheck.AutoSize = true;
-            autoScrollCheck.Location = new Point(5, 59);
-            autoScrollCheck.Name = "autoScrollCheck";
-            autoScrollCheck.Size = new Size(83, 19);
-            autoScrollCheck.TabIndex = 4;
-            autoScrollCheck.Text = "Auto scroll";
-            autoScrollCheck.UseVisualStyleBackColor = true;
-            autoScrollCheck.CheckedChanged += autoScrollCheck_CheckedChanged;
+            clearBufferBttn.Location = new Point(5, 34);
+            clearBufferBttn.Name = "clearBufferBttn";
+            clearBufferBttn.Size = new Size(94, 23);
+            clearBufferBttn.TabIndex = 5;
+            clearBufferBttn.Text = "Clear buffer";
+            clearBufferBttn.UseVisualStyleBackColor = true;
+            clearBufferBttn.Click += clearBufferBttn_Click;
             // 
             // MainFrm
             // 
@@ -207,5 +219,6 @@
         private Panel leftPanel;
         private System.Windows.Forms.Timer uiTimer;
         private CheckBox autoScrollCheck;
+        private Button clearBufferBttn;
     }
 }

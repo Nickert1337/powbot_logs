@@ -28,6 +28,7 @@ namespace Powbot.Logs
 
         private void MainFrm_Load(object sender, EventArgs e)
         {
+            Text = $"Powbot Logs - {Application.ProductVersion}";
             logsTxt.ReadOnly = true;
         }
 
@@ -79,6 +80,7 @@ namespace Powbot.Logs
 
         public void RefreshSelectedDevice()
         {
+            logsTxt.Clear();
             _logProcessor.Clear();
 
             if (_selectedDevice == null)
@@ -118,6 +120,11 @@ namespace Powbot.Logs
 
         private void RefreshLogs()
         {
+            if (_selectedDevice == null)
+            {
+                return;
+            }
+            
             try
             {
                 var cor = new ConsoleOutputReceiver();
@@ -147,6 +154,20 @@ namespace Powbot.Logs
             }
         }
 
+        private void ClearLogsBuffer()
+        {
+            try
+            {
+                Client.ExecuteRemoteCommand(
+                    "logcat -c",
+                    _selectedDevice, new ConsoleOutputReceiver());
+            }
+            catch
+            {
+                //Ignore this error, usually happens if the connection is fucked (new instance started/adb crashed etc.)
+            }
+        }
+        
         private void autoScrollCheck_CheckedChanged(object sender, EventArgs e)
         {
             if (autoScrollCheck.Checked)
@@ -154,6 +175,13 @@ namespace Powbot.Logs
                 logsTxt.SelectionStart = logsTxt.Text.Length;
                 logsTxt.ScrollToCaret();
             }
+        }
+
+        private void clearBufferBttn_Click(object sender, EventArgs e)
+        {
+            logsTxt.Clear();
+            _logProcessor.Clear();
+            ClearLogsBuffer();
         }
     }
 }

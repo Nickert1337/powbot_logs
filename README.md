@@ -12,7 +12,8 @@ _Screenshot_
 5. Click _Copy_ to copy logs to your clipboard.
 
 ## Removing 'spammy' lines from the log
-Open 'blacklisted_lines.ini' and add a part of the line you want to remove from the log. Regex can be used to match multiple lines with changing formats. 
+1. Open 'blacklisted_lines.ini' and add a part of the line you want to remove from the log. Regex can be used to match multiple lines with changing formats.
+2. Restart _Powbot.Logs.exe_ to reflect the changes. Do not worry about logs being lost, they are stored within the emulator. Rebooting the application will only change what is displayed and not clear the buffers.
 
 ## Logs are huge
 Logs in the emulator will stay in memory until you press the _Clear buffer_ button. If your logs are huge, pressing this button will clear the logs in the emulator. T

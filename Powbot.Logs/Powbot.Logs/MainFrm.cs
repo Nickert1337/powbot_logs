@@ -1,4 +1,6 @@
+using Powbot.Logs.Consumers;
 using Powbot.Logs.Controls;
+using Powbot.Logs.Extensions;
 using SharpAdbClient;
 
 namespace Powbot.Logs
@@ -10,7 +12,10 @@ namespace Powbot.Logs
 
         private DeviceData? _selectedDevice;
 
-        private LogProcessor _logProcessor = new LogProcessor("^(\\d+-\\d+ \\d+:\\d+:\\d+.\\d+)  \\d+  \\d+ (.*?)$");
+        private LogProcessor _logProcessor = new LogProcessor(Map.Strings.MESSAGE_REGEX);
+
+        private List<DeviceData> _devices { get; set; }
+        private List<LogConsumer> _deviceLogConsumers { get; set; } = new List<LogConsumer>();
 
 
         public MainFrm()
@@ -52,7 +57,7 @@ namespace Powbot.Logs
 
             selectedDeviceSerial = selectedDeviceSerial.Remove(0, selectedDeviceSerial.IndexOf(']') + 1);
 
-            _selectedDevice = Client.GetDevices()
+            _selectedDevice = _devices
                 .FirstOrDefault(device => device.Serial.Equals(selectedDeviceSerial));
 
             RefreshSelectedDevice();
@@ -71,8 +76,10 @@ namespace Powbot.Logs
 
         public void RefreshDeviceList()
         {
+            _devices = Client.GetDevices();
+
             devicesList.Items.Clear();
-            foreach (var device in Client.GetDevices())
+            foreach (var device in _devices)
             {
                 devicesList.Items.Add($"[{device.State}]{device.Serial}");
             }
@@ -110,6 +117,22 @@ namespace Powbot.Logs
 
         private void uiTimer_Tick(object sender, EventArgs e)
         {
+            //Continuously check for new devices and start streaming those
+            if (streamToFileCheck.Checked)
+            {
+                foreach (var deviceData in _devices)
+                {
+                    if (_deviceLogConsumers.Any(dlc => dlc.Device.Equals(deviceData)))
+                    {
+                        continue;
+                    }
+
+                    var consumer = new LogConsumer(deviceData, Client);
+                    consumer.StartAsync();
+                    _deviceLogConsumers.Add(consumer);
+                }
+            }
+
             if (!autoRefreshCheck.Checked)
             {
                 return;
@@ -124,14 +147,16 @@ namespace Powbot.Logs
             {
                 return;
             }
-            
+
             try
             {
-                var cor = new ConsoleOutputReceiver();
-                Client.ExecuteRemoteCommand(
-                    "logcat -d ActivityManager:I com.jagex.oldscape.android/com.jagex.android.MainActivity",
-                    _selectedDevice, cor);
-                _logProcessor.Process(cor.ToString()!);
+                var logs = _selectedDevice.GetLogcatLogs(Client);
+                if (logs == null)
+                {
+                    return;
+                }
+
+                _logProcessor.Process(logs);
             }
             catch
             {
@@ -149,25 +174,33 @@ namespace Powbot.Logs
 
             if (autoScrollCheck.Checked)
             {
-                logsTxt.SelectionStart = logsTxt.Text.Length;
-                logsTxt.ScrollToCaret();
+                ScrollDown();
             }
         }
 
         private void ClearLogsBuffer()
         {
+            if (_selectedDevice == null)
+            {
+                return;
+            }
+
             try
             {
-                Client.ExecuteRemoteCommand(
-                    "logcat -c",
-                    _selectedDevice, new ConsoleOutputReceiver());
+                _selectedDevice.ClearLogcatLogs(Client);
             }
             catch
             {
                 //Ignore this error, usually happens if the connection is fucked (new instance started/adb crashed etc.)
             }
         }
-        
+
+        private void ScrollDown()
+        {
+            logsTxt.SelectionStart = logsTxt.Text.Length;
+            logsTxt.ScrollToCaret();
+        }
+
         private void autoScrollCheck_CheckedChanged(object sender, EventArgs e)
         {
             if (autoScrollCheck.Checked)
@@ -182,6 +215,26 @@ namespace Powbot.Logs
             logsTxt.Clear();
             _logProcessor.Clear();
             ClearLogsBuffer();
+        }
+
+        private void scrollDownBttn_Click(object sender, EventArgs e)
+        {
+            ScrollDown();
+        }
+
+        private void streamToFileCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if (streamToFileCheck.Checked || !_deviceLogConsumers.Any())
+            {
+                return;
+            }
+            
+            foreach (var consumer in _deviceLogConsumers)
+            {
+                consumer.StopAsync();
+            }
+
+            _deviceLogConsumers.Clear();
         }
     }
 }

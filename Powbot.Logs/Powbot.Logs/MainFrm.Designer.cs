@@ -35,13 +35,15 @@
             mainPanel = new Panel();
             logsTxt = new RichTextBox();
             logControlsPanel = new Panel();
+            clearBufferBttn = new Button();
             autoScrollCheck = new CheckBox();
             autoRefreshCheck = new CheckBox();
             refreshLogsBttn = new Button();
             copyLogsBttn = new Button();
             leftPanel = new Panel();
             uiTimer = new System.Windows.Forms.Timer(components);
-            clearBufferBttn = new Button();
+            scrollDownBttn = new Button();
+            streamToFileCheck = new CheckBox();
             devicesPanel.SuspendLayout();
             mainPanel.SuspendLayout();
             logControlsPanel.SuspendLayout();
@@ -56,7 +58,7 @@
             devicesList.ItemHeight = 15;
             devicesList.Location = new Point(5, 5);
             devicesList.Name = "devicesList";
-            devicesList.Size = new Size(190, 240);
+            devicesList.Size = new Size(195, 240);
             devicesList.TabIndex = 0;
             devicesList.SelectedIndexChanged += devicesList_SelectedIndexChanged;
             // 
@@ -65,7 +67,7 @@
             refreshBttn.Dock = DockStyle.Bottom;
             refreshBttn.Location = new Point(5, 251);
             refreshBttn.Name = "refreshBttn";
-            refreshBttn.Size = new Size(190, 23);
+            refreshBttn.Size = new Size(195, 23);
             refreshBttn.TabIndex = 1;
             refreshBttn.Text = "Refresh devices";
             refreshBttn.UseVisualStyleBackColor = true;
@@ -79,7 +81,7 @@
             devicesPanel.Location = new Point(0, 0);
             devicesPanel.Name = "devicesPanel";
             devicesPanel.Padding = new Padding(5);
-            devicesPanel.Size = new Size(200, 279);
+            devicesPanel.Size = new Size(205, 279);
             devicesPanel.TabIndex = 2;
             // 
             // mainPanel
@@ -106,6 +108,8 @@
             // 
             // logControlsPanel
             // 
+            logControlsPanel.Controls.Add(streamToFileCheck);
+            logControlsPanel.Controls.Add(scrollDownBttn);
             logControlsPanel.Controls.Add(clearBufferBttn);
             logControlsPanel.Controls.Add(autoScrollCheck);
             logControlsPanel.Controls.Add(autoRefreshCheck);
@@ -115,18 +119,28 @@
             logControlsPanel.Location = new Point(0, 280);
             logControlsPanel.Name = "logControlsPanel";
             logControlsPanel.Padding = new Padding(5);
-            logControlsPanel.Size = new Size(200, 349);
+            logControlsPanel.Size = new Size(205, 349);
             logControlsPanel.TabIndex = 4;
             logControlsPanel.Visible = false;
+            // 
+            // clearBufferBttn
+            // 
+            clearBufferBttn.Location = new Point(5, 34);
+            clearBufferBttn.Name = "clearBufferBttn";
+            clearBufferBttn.Size = new Size(94, 23);
+            clearBufferBttn.TabIndex = 5;
+            clearBufferBttn.Text = "Clear buffer";
+            clearBufferBttn.UseVisualStyleBackColor = true;
+            clearBufferBttn.Click += clearBufferBttn_Click;
             // 
             // autoScrollCheck
             // 
             autoScrollCheck.AutoSize = true;
             autoScrollCheck.Location = new Point(5, 88);
             autoScrollCheck.Name = "autoScrollCheck";
-            autoScrollCheck.Size = new Size(83, 19);
+            autoScrollCheck.Size = new Size(164, 19);
             autoScrollCheck.TabIndex = 4;
-            autoScrollCheck.Text = "Auto scroll";
+            autoScrollCheck.Text = "Automatically scroll down";
             autoScrollCheck.UseVisualStyleBackColor = true;
             autoScrollCheck.CheckedChanged += autoScrollCheck_CheckedChanged;
             // 
@@ -135,15 +149,15 @@
             autoRefreshCheck.AutoSize = true;
             autoRefreshCheck.Location = new Point(5, 63);
             autoRefreshCheck.Name = "autoRefreshCheck";
-            autoRefreshCheck.Size = new Size(91, 19);
+            autoRefreshCheck.Size = new Size(139, 19);
             autoRefreshCheck.TabIndex = 2;
-            autoRefreshCheck.Text = "Auto refresh";
+            autoRefreshCheck.Text = "Automatically refresh";
             autoRefreshCheck.UseVisualStyleBackColor = true;
             autoRefreshCheck.CheckedChanged += autoRefreshCheck_CheckedChanged;
             // 
             // refreshLogsBttn
             // 
-            refreshLogsBttn.Location = new Point(101, 5);
+            refreshLogsBttn.Location = new Point(106, 5);
             refreshLogsBttn.Name = "refreshLogsBttn";
             refreshLogsBttn.Size = new Size(94, 23);
             refreshLogsBttn.TabIndex = 3;
@@ -168,7 +182,7 @@
             leftPanel.Dock = DockStyle.Left;
             leftPanel.Location = new Point(0, 0);
             leftPanel.Name = "leftPanel";
-            leftPanel.Size = new Size(200, 629);
+            leftPanel.Size = new Size(205, 629);
             leftPanel.TabIndex = 4;
             // 
             // uiTimer
@@ -177,15 +191,26 @@
             uiTimer.Interval = 250;
             uiTimer.Tick += uiTimer_Tick;
             // 
-            // clearBufferBttn
+            // scrollDownBttn
             // 
-            clearBufferBttn.Location = new Point(5, 34);
-            clearBufferBttn.Name = "clearBufferBttn";
-            clearBufferBttn.Size = new Size(94, 23);
-            clearBufferBttn.TabIndex = 5;
-            clearBufferBttn.Text = "Clear buffer";
-            clearBufferBttn.UseVisualStyleBackColor = true;
-            clearBufferBttn.Click += clearBufferBttn_Click;
+            scrollDownBttn.Location = new Point(106, 34);
+            scrollDownBttn.Name = "scrollDownBttn";
+            scrollDownBttn.Size = new Size(94, 23);
+            scrollDownBttn.TabIndex = 6;
+            scrollDownBttn.Text = "Scroll down";
+            scrollDownBttn.UseVisualStyleBackColor = true;
+            scrollDownBttn.Click += scrollDownBttn_Click;
+            // 
+            // streamToFileCheck
+            // 
+            streamToFileCheck.AutoSize = true;
+            streamToFileCheck.Location = new Point(5, 113);
+            streamToFileCheck.Name = "streamToFileCheck";
+            streamToFileCheck.Size = new Size(197, 19);
+            streamToFileCheck.TabIndex = 7;
+            streamToFileCheck.Text = "Automatically stream logs to file";
+            streamToFileCheck.UseVisualStyleBackColor = true;
+            streamToFileCheck.CheckedChanged += streamToFileCheck_CheckedChanged;
             // 
             // MainFrm
             // 
@@ -220,5 +245,7 @@
         private System.Windows.Forms.Timer uiTimer;
         private CheckBox autoScrollCheck;
         private Button clearBufferBttn;
+        private Button scrollDownBttn;
+        private CheckBox streamToFileCheck;
     }
 }

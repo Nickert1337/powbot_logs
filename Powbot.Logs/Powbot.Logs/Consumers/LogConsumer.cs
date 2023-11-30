@@ -18,9 +18,14 @@ public class LogConsumer : ProcessorBase
         _logProcessor = new LogProcessor(Map.Strings.MESSAGE_REGEX);
     }
 
+    private string ReplaceInvalidChars(string filename)
+    {
+        return string.Join("_", filename.Split(Path.GetInvalidFileNameChars()));    
+    }
+    
     private string GetLogsFilePath()
     {
-        return Path.Combine(Map.Strings.LOGS_FOLDER, string.Format(Map.Strings.LOGS_FILE_NAME, Device.Serial));
+        return Path.Combine(Map.Strings.LOGS_FOLDER, string.Format(Map.Strings.LOGS_FILE_NAME, ReplaceInvalidChars(Device.Serial)));
     }
     
     protected override Task ProcessAsync()

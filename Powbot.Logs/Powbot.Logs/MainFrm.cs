@@ -1,3 +1,4 @@
+using IniFileParser.Model;
 using Powbot.Logs.Consumers;
 using Powbot.Logs.Controls;
 using Powbot.Logs.Extensions;
@@ -12,7 +13,9 @@ namespace Powbot.Logs
 
         private DeviceData? _selectedDevice;
 
-        private LogProcessor _logProcessor = new LogProcessor(Map.Strings.MESSAGE_REGEX);
+        private LogProcessor _logProcessor = new LogProcessor(Map.Strings.MessageRegex);
+        
+        private IniData _settings { get; set; }
 
         private List<DeviceData> _devices { get; set; }
         private List<LogConsumer> _deviceLogConsumers { get; set; } = new List<LogConsumer>();
@@ -21,8 +24,51 @@ namespace Powbot.Logs
         public MainFrm()
         {
             InitializeComponent();
+            
+            LoadSettingsIni();
+            InitializeColorScheme();
 
             StartAdb();
+        }
+
+        private void LoadSettingsIni()
+        {
+            if (!File.Exists(Map.Strings.IniFileName))
+            {
+                return;
+            }
+
+            try
+            {
+                var parser = new IniFileParser.IniFileParser();
+                _settings = parser.ReadFile(Map.Strings.IniFileName);
+            }
+            catch
+            {
+                MessageBox.Show($"Failed to read {Map.Strings.IniFileName}", "LoadSettingsIni failed",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void InitializeColorScheme()
+        {
+            if (_settings == null)
+            {
+                return;
+            }
+
+            var mode = _settings[Map.Ini.ColorSchemeSection][Map.Ini.ColorSchemeMode];
+            if (string.IsNullOrEmpty(mode))
+            {
+                return;
+            }
+
+            switch (mode.ToLower())
+            {
+                case "dark":
+                    ChangeTheme(ColorScheme.Dark, Controls);
+                    break;
+            }
         }
 
         public StartServerResult StartAdb()
@@ -235,6 +281,44 @@ namespace Powbot.Logs
             }
 
             _deviceLogConsumers.Clear();
+        }
+        
+        public void ChangeTheme(ColorScheme scheme, Control.ControlCollection container)
+        {
+            BackColor = scheme.PanelBackgroundColor;
+            ForeColor = scheme.PanelForeColor;
+            
+            foreach (Control component in container)
+            {
+                switch (component)
+                {
+                    case Panel:
+                        ChangeTheme(scheme, component.Controls);
+                        component.BackColor = scheme.PanelBackgroundColor;
+                        component.ForeColor = scheme.PanelForeColor;
+                        break;
+                    
+                    case Button:
+                        component.BackColor = scheme.ButtonBackgroundColor;
+                        component.ForeColor = scheme.ButtonForeColor;
+                        break;
+                    
+                    case TextBox:
+                    case RichTextBox:
+                    case ListBox:
+                        component.BackColor = scheme.TextboxBackgroundColor;
+                        component.ForeColor = scheme.TextboxForeColor;
+                        break;
+                }
+            }
+        }
+
+        private void OnClosed(object? sender, EventArgs e)
+        {
+            foreach (var consumer in _deviceLogConsumers)
+            {
+                consumer.StopAsync();
+            }
         }
     }
 }

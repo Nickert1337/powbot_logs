@@ -222,6 +222,7 @@
             Name = "MainFrm";
             Text = "Powbot logs terminal";
             Load += MainFrm_Load;
+            Closed += OnClosed;
             devicesPanel.ResumeLayout(false);
             mainPanel.ResumeLayout(false);
             logControlsPanel.ResumeLayout(false);

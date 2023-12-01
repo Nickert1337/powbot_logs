@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="IniFileParserStandard" Version="1.0.1" />
     <PackageReference Include="SharpAdbClient" Version="2.3.23" />
   </ItemGroup>
 

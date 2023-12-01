@@ -15,7 +15,7 @@ public class LogConsumer : ProcessorBase
     {
         Device = device;
         _adbClient = adbClient;
-        _logProcessor = new LogProcessor(Map.Strings.MESSAGE_REGEX);
+        _logProcessor = new LogProcessor(Map.Strings.MessageRegex);
     }
 
     private string ReplaceInvalidChars(string filename)
@@ -25,7 +25,7 @@ public class LogConsumer : ProcessorBase
     
     private string GetLogsFilePath()
     {
-        return Path.Combine(Map.Strings.LOGS_FOLDER, string.Format(Map.Strings.LOGS_FILE_NAME, ReplaceInvalidChars(Device.Serial)));
+        return Path.Combine(Map.Strings.LogsFolderName, string.Format(Map.Strings.LogsFileName, ReplaceInvalidChars(Device.Serial)));
     }
     
     protected override Task ProcessAsync()

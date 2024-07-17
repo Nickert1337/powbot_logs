@@ -35,6 +35,11 @@
             mainPanel = new Panel();
             logsTxt = new RichTextBox();
             logControlsPanel = new Panel();
+            killOsrsBttn = new Button();
+            restartOsrsBttn = new Button();
+            installApkBttn = new Button();
+            streamToFileCheck = new CheckBox();
+            scrollDownBttn = new Button();
             clearBufferBttn = new Button();
             autoScrollCheck = new CheckBox();
             autoRefreshCheck = new CheckBox();
@@ -42,8 +47,6 @@
             copyLogsBttn = new Button();
             leftPanel = new Panel();
             uiTimer = new System.Windows.Forms.Timer(components);
-            scrollDownBttn = new Button();
-            streamToFileCheck = new CheckBox();
             devicesPanel.SuspendLayout();
             mainPanel.SuspendLayout();
             logControlsPanel.SuspendLayout();
@@ -108,6 +111,9 @@
             // 
             // logControlsPanel
             // 
+            logControlsPanel.Controls.Add(killOsrsBttn);
+            logControlsPanel.Controls.Add(restartOsrsBttn);
+            logControlsPanel.Controls.Add(installApkBttn);
             logControlsPanel.Controls.Add(streamToFileCheck);
             logControlsPanel.Controls.Add(scrollDownBttn);
             logControlsPanel.Controls.Add(clearBufferBttn);
@@ -122,6 +128,57 @@
             logControlsPanel.Size = new Size(205, 349);
             logControlsPanel.TabIndex = 4;
             logControlsPanel.Visible = false;
+            // 
+            // killOsrsBttn
+            // 
+            killOsrsBttn.Location = new Point(5, 287);
+            killOsrsBttn.Name = "killOsrsBttn";
+            killOsrsBttn.Size = new Size(195, 23);
+            killOsrsBttn.TabIndex = 10;
+            killOsrsBttn.Text = "Mass kill OSRS";
+            killOsrsBttn.UseVisualStyleBackColor = true;
+            killOsrsBttn.Click += killOsrsBttn_Click;
+            // 
+            // restartOsrsBttn
+            // 
+            restartOsrsBttn.Location = new Point(5, 316);
+            restartOsrsBttn.Name = "restartOsrsBttn";
+            restartOsrsBttn.Size = new Size(195, 23);
+            restartOsrsBttn.TabIndex = 9;
+            restartOsrsBttn.Text = "Mass (re)start OSRS";
+            restartOsrsBttn.UseVisualStyleBackColor = true;
+            restartOsrsBttn.Click += restartOsrsBttn_Click;
+            // 
+            // installApkBttn
+            // 
+            installApkBttn.Location = new Point(5, 258);
+            installApkBttn.Name = "installApkBttn";
+            installApkBttn.Size = new Size(195, 23);
+            installApkBttn.TabIndex = 8;
+            installApkBttn.Text = "Mass install APK";
+            installApkBttn.UseVisualStyleBackColor = true;
+            installApkBttn.Click += installApkBttn_Click;
+            // 
+            // streamToFileCheck
+            // 
+            streamToFileCheck.AutoSize = true;
+            streamToFileCheck.Location = new Point(5, 113);
+            streamToFileCheck.Name = "streamToFileCheck";
+            streamToFileCheck.Size = new Size(197, 19);
+            streamToFileCheck.TabIndex = 7;
+            streamToFileCheck.Text = "Automatically stream logs to file";
+            streamToFileCheck.UseVisualStyleBackColor = true;
+            streamToFileCheck.CheckedChanged += streamToFileCheck_CheckedChanged;
+            // 
+            // scrollDownBttn
+            // 
+            scrollDownBttn.Location = new Point(106, 34);
+            scrollDownBttn.Name = "scrollDownBttn";
+            scrollDownBttn.Size = new Size(94, 23);
+            scrollDownBttn.TabIndex = 6;
+            scrollDownBttn.Text = "Scroll down";
+            scrollDownBttn.UseVisualStyleBackColor = true;
+            scrollDownBttn.Click += scrollDownBttn_Click;
             // 
             // clearBufferBttn
             // 
@@ -191,27 +248,6 @@
             uiTimer.Interval = 250;
             uiTimer.Tick += uiTimer_Tick;
             // 
-            // scrollDownBttn
-            // 
-            scrollDownBttn.Location = new Point(106, 34);
-            scrollDownBttn.Name = "scrollDownBttn";
-            scrollDownBttn.Size = new Size(94, 23);
-            scrollDownBttn.TabIndex = 6;
-            scrollDownBttn.Text = "Scroll down";
-            scrollDownBttn.UseVisualStyleBackColor = true;
-            scrollDownBttn.Click += scrollDownBttn_Click;
-            // 
-            // streamToFileCheck
-            // 
-            streamToFileCheck.AutoSize = true;
-            streamToFileCheck.Location = new Point(5, 113);
-            streamToFileCheck.Name = "streamToFileCheck";
-            streamToFileCheck.Size = new Size(197, 19);
-            streamToFileCheck.TabIndex = 7;
-            streamToFileCheck.Text = "Automatically stream logs to file";
-            streamToFileCheck.UseVisualStyleBackColor = true;
-            streamToFileCheck.CheckedChanged += streamToFileCheck_CheckedChanged;
-            // 
             // MainFrm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -221,8 +257,8 @@
             Controls.Add(mainPanel);
             Name = "MainFrm";
             Text = "Powbot logs terminal";
-            Load += MainFrm_Load;
             Closed += OnClosed;
+            Load += MainFrm_Load;
             devicesPanel.ResumeLayout(false);
             mainPanel.ResumeLayout(false);
             logControlsPanel.ResumeLayout(false);
@@ -248,5 +284,8 @@
         private Button clearBufferBttn;
         private Button scrollDownBttn;
         private CheckBox streamToFileCheck;
+        private Button restartOsrsBttn;
+        private Button installApkBttn;
+        private Button killOsrsBttn;
     }
 }

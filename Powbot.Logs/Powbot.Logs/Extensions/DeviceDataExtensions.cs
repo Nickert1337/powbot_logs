@@ -19,4 +19,18 @@ public static class DeviceDataExtensions
             "logcat -c",
             device, new ConsoleOutputReceiver());
     }
+
+    public static void StopApp(this DeviceData device, AdbClient adbClient, string applicationName)
+    {
+        adbClient.ExecuteRemoteCommand(
+            $"am force-stop {applicationName}",
+            device, new ConsoleOutputReceiver());
+    }
+
+    public static void StartApp(this DeviceData device, AdbClient adbClient, string applicationName)
+    {
+        adbClient.ExecuteRemoteCommand(
+            $"am start -n {applicationName}",
+            device, new ConsoleOutputReceiver());
+    }
 }

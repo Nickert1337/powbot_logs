@@ -14,17 +14,20 @@ namespace Powbot.Logs
         private DeviceData? _selectedDevice;
 
         private LogProcessor _logProcessor = new LogProcessor(Map.Strings.MessageRegex);
-        
+
         private IniData _settings { get; set; }
 
         private List<DeviceData> _devices { get; set; }
         private List<LogConsumer> _deviceLogConsumers { get; set; } = new List<LogConsumer>();
 
+        private const string OSRS_PACKAGE_NAME = "com.jagex.oldscape.android";
+        private const string OSRS_ACTIVITY_NAME = "com.jagex.android.MainActivity";
+
 
         public MainFrm()
         {
             InitializeComponent();
-            
+
             LoadSettingsIni();
             InitializeColorScheme();
 
@@ -274,7 +277,7 @@ namespace Powbot.Logs
             {
                 return;
             }
-            
+
             foreach (var consumer in _deviceLogConsumers)
             {
                 consumer.StopAsync();
@@ -282,12 +285,12 @@ namespace Powbot.Logs
 
             _deviceLogConsumers.Clear();
         }
-        
+
         public void ChangeTheme(ColorScheme scheme, Control.ControlCollection container)
         {
             BackColor = scheme.PanelBackgroundColor;
             ForeColor = scheme.PanelForeColor;
-            
+
             foreach (Control component in container)
             {
                 switch (component)
@@ -297,12 +300,12 @@ namespace Powbot.Logs
                         component.BackColor = scheme.PanelBackgroundColor;
                         component.ForeColor = scheme.PanelForeColor;
                         break;
-                    
+
                     case Button:
                         component.BackColor = scheme.ButtonBackgroundColor;
                         component.ForeColor = scheme.ButtonForeColor;
                         break;
-                    
+
                     case TextBox:
                     case RichTextBox:
                     case ListBox:
@@ -318,6 +321,47 @@ namespace Powbot.Logs
             foreach (var consumer in _deviceLogConsumers)
             {
                 consumer.StopAsync();
+            }
+        }
+
+        private void installApkBttn_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "APK files (*.apk)|*.apk|All files (*.*)|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+
+
+                foreach (var device in _devices)
+                {
+                    using (FileStream fileStream = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.Read))
+                    {
+                        Client.Install(device, fileStream);
+                    }
+                }
+            }
+        }
+
+        private async void restartOsrsBttn_Click(object sender, EventArgs e)
+        {
+            foreach (var device in _devices)
+            {
+                device.StopApp(Client, OSRS_PACKAGE_NAME);
+                device.StartApp(Client, $"{OSRS_PACKAGE_NAME}/{OSRS_ACTIVITY_NAME}");
+            }
+        }
+
+        private void killOsrsBttn_Click(object sender, EventArgs e)
+        {
+            foreach (var device in _devices)
+            {
+                device.StopApp(Client, OSRS_PACKAGE_NAME);
             }
         }
     }

@@ -1,7 +1,7 @@
 # powbot_logs
 This little tool will make finding logs for your emulator or device easier. Providing these logs to scriptwriters allows them to debug/fix issues with their scripts much quicker and is greatly appreciated.
 
-![image](https://github.com/Nickert1337/powbot_logs/assets/98966743/addc104a-b7f5-4a37-a425-3ed362be9bdf)
+![image](![image](https://github.com/user-attachments/assets/18af080e-d4b9-4519-9355-dccc3af35568)
 
 ## Getting started
 1. Either download the [latest release](https://github.com/Nickert1337/powbot_logs/releases) from github or compile the source code yourself using your favourite .NET compiler.

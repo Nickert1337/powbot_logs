@@ -14,6 +14,16 @@ This little tool will make finding logs for your emulator or device easier. Prov
 
 > Enabling _Auto scroll_ is highly recommended as it makes the logs scroll to the newest line.
 
+## Streaming all emulator logs to seperate files
+
+1. Check the _Automatically log all emulator logs to separate files_ option in the GUI.
+2. A folder named `logs` will be created in your `powbot_logs` directory.
+3. Ensure all emulators are listed in the devices list.
+4. For each emulator in the devices list, a `.txt` file will be created in the `logs` folder.
+5. Logs produced by these emulators will be automatically appended to their respective `.txt` files.
+
+> You should regulary clean these files as new logs will just be appended to the old `.txt` files.
+
 ## Ignoring "spammy" log messages
 1. Edit the `blacklisted_lines.ini` file by inserting a new line for each phrase that you would like to ignore.<br/>
    _Regex can be used to match multiple lines with changing formats._

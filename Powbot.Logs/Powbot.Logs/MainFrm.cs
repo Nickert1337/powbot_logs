@@ -84,6 +84,8 @@ namespace Powbot.Logs
         {
             Text = $"Powbot Logs - {Application.ProductVersion}";
             logsTxt.ReadOnly = true;
+
+            RefreshDeviceList();
         }
 
         private void copyLogsBttn_Click(object sender, EventArgs e)

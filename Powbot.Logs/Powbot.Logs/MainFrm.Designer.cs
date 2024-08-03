@@ -46,6 +46,7 @@
 			killOsrsBttn = new Button();
 			restartOsrsBttn = new Button();
 			installApkBttn = new Button();
+			clearCacheBttn = new Button();
 			leftPanel = new Panel();
 			uiTimer = new System.Windows.Forms.Timer(components);
 			devicesPanel.SuspendLayout();
@@ -214,18 +215,19 @@
 			logControlsPanel.Controls.Add(killOsrsBttn);
 			logControlsPanel.Controls.Add(restartOsrsBttn);
 			logControlsPanel.Controls.Add(installApkBttn);
+			logControlsPanel.Controls.Add(clearCacheBttn);
 			logControlsPanel.Dock = DockStyle.Bottom;
-			logControlsPanel.Location = new Point(0, 550);
+			logControlsPanel.Location = new Point(0, 525);
 			logControlsPanel.Name = "logControlsPanel";
 			logControlsPanel.Padding = new Padding(5);
-			logControlsPanel.Size = new Size(205, 79);
+			logControlsPanel.Size = new Size(205, 104);
 			logControlsPanel.TabIndex = 4;
 			logControlsPanel.Visible = false;
 			// 
 			// killOsrsBttn
 			// 
 			killOsrsBttn.Dock = DockStyle.Bottom;
-			killOsrsBttn.Location = new Point(5, 5);
+			killOsrsBttn.Location = new Point(5, 7);
 			killOsrsBttn.Name = "killOsrsBttn";
 			killOsrsBttn.Size = new Size(195, 23);
 			killOsrsBttn.TabIndex = 10;
@@ -236,7 +238,7 @@
 			// restartOsrsBttn
 			// 
 			restartOsrsBttn.Dock = DockStyle.Bottom;
-			restartOsrsBttn.Location = new Point(5, 28);
+			restartOsrsBttn.Location = new Point(5, 30);
 			restartOsrsBttn.Name = "restartOsrsBttn";
 			restartOsrsBttn.Size = new Size(195, 23);
 			restartOsrsBttn.TabIndex = 9;
@@ -247,13 +249,24 @@
 			// installApkBttn
 			// 
 			installApkBttn.Dock = DockStyle.Bottom;
-			installApkBttn.Location = new Point(5, 51);
+			installApkBttn.Location = new Point(5, 53);
 			installApkBttn.Name = "installApkBttn";
 			installApkBttn.Size = new Size(195, 23);
 			installApkBttn.TabIndex = 8;
 			installApkBttn.Text = "Mass install APK";
 			installApkBttn.UseVisualStyleBackColor = true;
 			installApkBttn.Click += installApkBttn_Click;
+			// 
+			// clearCacheBttn
+			// 
+			clearCacheBttn.Dock = DockStyle.Bottom;
+			clearCacheBttn.Location = new Point(5, 76);
+			clearCacheBttn.Name = "clearCacheBttn";
+			clearCacheBttn.Size = new Size(195, 23);
+			clearCacheBttn.TabIndex = 11;
+			clearCacheBttn.Text = "Mass clear cache";
+			clearCacheBttn.UseVisualStyleBackColor = true;
+			clearCacheBttn.Click += clearCacheBttn_Click;
 			// 
 			// leftPanel
 			// 
@@ -312,5 +325,6 @@
         private Button installApkBttn;
         private Button killOsrsBttn;
 		private Panel panel1;
+		private Button clearCacheBttn;
 	}
 }

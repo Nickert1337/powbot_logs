@@ -33,4 +33,11 @@ public static class DeviceDataExtensions
             $"am start -n {applicationName}",
             device, new ConsoleOutputReceiver());
     }
+
+	public static void ClearCache(this DeviceData device, AdbClient adbClient)
+	{
+		adbClient.ExecuteRemoteCommand(
+			$"pm trim-caches 999G",
+			device, new ConsoleOutputReceiver());
+	}
 }

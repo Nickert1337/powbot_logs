@@ -3,6 +3,7 @@ using Powbot.Logs.Consumers;
 using Powbot.Logs.Controls;
 using Powbot.Logs.Extensions;
 using SharpAdbClient;
+using SharpAdbClient.DeviceCommands;
 
 namespace Powbot.Logs
 {
@@ -328,7 +329,7 @@ namespace Powbot.Logs
 
 		private void installApkBttn_Click(object sender, EventArgs e)
 		{
-			using (OpenFileDialog openFileDialog = new OpenFileDialog())
+			using (var openFileDialog = new OpenFileDialog())
 			{
 				openFileDialog.Filter = "APK files (*.apk)|*.apk|All files (*.*)|*.*";
 				openFileDialog.FilterIndex = 1;
@@ -342,7 +343,11 @@ namespace Powbot.Logs
 
 				foreach (var device in _devices)
 				{
-					using (FileStream fileStream = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.Read))
+					device.StopApp(Client, OSRS_PACKAGE_NAME);
+					device.ClearCache(Client);
+					device.ClearPowApk(Client);
+					device.UnistallButKeepData(Client, OSRS_PACKAGE_NAME);
+					using (var fileStream = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.Read))
 					{
 						Client.Install(device, fileStream);
 					}

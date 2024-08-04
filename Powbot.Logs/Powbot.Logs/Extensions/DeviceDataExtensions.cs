@@ -1,4 +1,5 @@
 ﻿using SharpAdbClient;
+using SharpAdbClient.DeviceCommands;
 
 namespace Powbot.Logs.Extensions;
 
@@ -40,4 +41,16 @@ public static class DeviceDataExtensions
 			$"pm trim-caches 999G",
 			device, new ConsoleOutputReceiver());
 	}
+
+    public static void ClearPowApk(this DeviceData device, AdbClient adbClient)
+    {
+        adbClient.ExecuteRemoteCommand(
+            $"find /sdcard/Android/data/com.jagex.oldscape.android -type f -name '*.apk' -exec rm {{}} \\;",
+            device, new ConsoleOutputReceiver());
+    }
+    
+    public static void UnistallButKeepData(this DeviceData device, AdbClient adbClient, string applicationName)
+    {
+        adbClient.ExecuteRemoteCommand($"pm uninstall -k {applicationName}", device, new ConsoleOutputReceiver());
+    }
 }
